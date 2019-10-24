@@ -1,9 +1,10 @@
 const  express = require('express');
 const Post = require('../models/post');
+const authenticate = require('../middleware/authenticate');
 
 const router = express.Router();
 
-router.post("", (req, res, next) => {
+router.post("", authenticate, (req, res, next) => {
   const posts = new Post({
     title: req.body.title,
     content: req.body.content
@@ -18,7 +19,7 @@ router.post("", (req, res, next) => {
   });
 });
 
-router.put("/:id", (req, res, next) => {
+router.put("/:id", authenticate, (req, res, next) => {
   const post = new Post({
     _id: req.body.id,
     title: req.body.title,
@@ -51,7 +52,7 @@ router.get('/:id', (req, res, next) => {
   });
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', authenticate, (req, res, next) => {
   console.log(req.params.id);
   Post.deleteOne({_id: req.params.id}).then(
     result => {
