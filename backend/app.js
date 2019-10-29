@@ -6,7 +6,8 @@ const usersRoutes = require('./routes/users');
 
 const app = express();
 
-mongoose.connect("mongodb+srv://atif:0lpUWBIIfgKJp9di@cluster0-ksnzx.mongodb.net/node-angular?retryWrites=true&w=majority")
+// Mean cluster: https://cloud.mongodb.com/v2/5db2df49c56c98757a291ed0#clusters
+mongoose.connect("mongodb+srv://atif:KpXkzwTJm1ozp7Wk@cluster0-asa0a.mongodb.net/test?retryWrites=true&w=majority")
   .then(() => {
     console.log('Connected to monogoDB');
   })

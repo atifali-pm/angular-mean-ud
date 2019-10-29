@@ -23,6 +23,7 @@ export class AuthService {
     const user: Auth = { email, password };
     this.http.post<{ message: string, token: string }>('http://localhost:3000/api/user/login', user)
       .subscribe((response) => {
+        console.log(response);
         this.token = response.token;
       });
   }
