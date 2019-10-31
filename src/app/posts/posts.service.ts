@@ -24,7 +24,8 @@ export class PostsService {
               return {
                 title: post.title,
                 content: post.content,
-                id: post._id
+                id: post._id,
+                creator: post.creator
               };
             });
           })
@@ -44,7 +45,7 @@ export class PostsService {
   }
 
   addPost(title: string, content: string) {
-    const post: Post = { id: null, title, content };
+    const post: Post = { id: null, title, content, creator: null };
     this.http.post<{ message: string, postId: string }>('http://localhost:3000/api/posts', post).subscribe((postData) => {
       const postId = postData.postId;
       post.id = postId;
@@ -56,7 +57,7 @@ export class PostsService {
   }
 
   updatePost(id: string, title: string, content: string) {
-    const post: Post = { id, title, content };
+    const post: Post = { id, title, content, creator: null };
     this.http.put('http://localhost:3000/api/posts/' + id, post)
       .subscribe(response => {
         console.log(response);

@@ -1,4 +1,4 @@
-const  express = require('express');
+const express = require('express');
 const Post = require('../models/post');
 const authenticate = require('../middleware/authenticate');
 
@@ -7,7 +7,8 @@ const router = express.Router();
 router.post("", authenticate, (req, res, next) => {
   const posts = new Post({
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    creator: req.userData.userId
   }); //req.body;
   posts.save().then(result => {
     console.log(result);
@@ -25,9 +26,13 @@ router.put("/:id", authenticate, (req, res, next) => {
     title: req.body.title,
     content: req.body.content
   });
-  Post.updateOne({_id: req.params.id}, post).then(result => {
+  Post.updateOne({_id: req.params.id, creator: req.userData.userId}, post).then(result => {
     console.log(result);
-    res.status(200).json({message: "Update successfully!"});
+    if(result.nModified > 0){
+      res.status(200).json({message: "Update successfully!"});
+    } else {
+      res.status(401).json({message: "Not authorized!"});
+    }
   });
 });
 
@@ -54,10 +59,14 @@ router.get('/:id', (req, res, next) => {
 
 router.delete('/:id', authenticate, (req, res, next) => {
   console.log(req.params.id);
-  Post.deleteOne({_id: req.params.id}).then(
+  Post.deleteOne({_id: req.params.id, creator: req.userData.userId}).then(
     result => {
       console.log(result);
-      res.status(200).json({message: 'Post deleted!'});
+      if(result.n > 0){
+        res.status(200).json({message: 'Post deleted!'});
+      } else {
+        res.status(401).json({message: "Not authorized!"});
+      }
     }
   );
 })
